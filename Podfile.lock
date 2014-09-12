@@ -1,0 +1,13 @@
+PODS:
+  - pop (1.0.6)
+  - UIViewDrawRectBlock (0.0.1)
+
+DEPENDENCIES:
+  - pop (~> 1.0.6)
+  - UIViewDrawRectBlock
+
+SPEC CHECKSUMS:
+  pop: e518794da38942c05255eb64b36d894e70cb4f00
+  UIViewDrawRectBlock: 8442d46b06450bde42ae4bb0d318e0456c7f276d
+
+COCOAPODS: 0.33.1

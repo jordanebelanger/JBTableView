@@ -1,4 +1,4 @@
 JBTableView
 ===========
 
-UITableView supporting pull to refresh and load more actions with a built in interface to easily create your own custom pull to refresh and load more views
+UITableView supporting pull to refresh actions with a built in interface to easily create your own custom pull to refresh views
