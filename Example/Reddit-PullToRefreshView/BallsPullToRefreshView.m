@@ -1,5 +1,5 @@
 //
-//  JBPullToRefresh.m
+//  BallsPullToRefreshView.m
 //  JBTableView Example
 //
 //  Created by tehjord on 2014-08-06.
