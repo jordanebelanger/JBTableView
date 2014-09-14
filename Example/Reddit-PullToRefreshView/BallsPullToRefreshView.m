@@ -1,9 +1,9 @@
 //
 //  JBPullToRefresh.m
-//  Redditerino
+//  JBTableView Example
 //
 //  Created by tehjord on 2014-08-06.
-//  Copyright (c) 2014 Jordan Belanger. All rights reserved.
+//  Copyright (c) 2014 Jordane Belanger. All rights reserved.
 //
 
 #import "BallsPullToRefreshView.h"

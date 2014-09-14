@@ -1,9 +1,9 @@
 //
-//  JBCircleSpinnerPullToRefreshView.h
+//  CirclePullToRefreshView.h
 //  JBTableView Example
 //
 //  Created by tehjord on 2014-09-07.
-//  Copyright (c) 2014 Jordan Belanger. All rights reserved.
+//  Copyright (c) 2014 Jordane Belanger. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
