@@ -9,8 +9,11 @@
 #import "RedditViewController.h"
 #import "RedditLinkTableViewCell.h"
 #import "JBTableView/JBTableView.h"
+#import "JBTableView/JBPullToRefreshView.h"
 #import "CirclePullToRefreshView.h"
 #import "BallsPullToRefreshView.h"
+
+static UIColor *kLightBlueColor;
 
 @interface RedditViewController () <UITableViewDataSource, UITableViewDelegate, JBTableViewPullToRefreshViewDelegate>
 
@@ -22,6 +25,11 @@
 @end
 
 @implementation RedditViewController
+
++ (void)initialize
+{
+    kLightBlueColor = [UIColor colorWithRed:0.1 green:0.4 blue:0.7 alpha:1.0];
+}
 
 - (instancetype)initWithPullToRefreshViewClass:(Class<JBPullToRefreshView>)pullToRefreshViewClass;
 {
@@ -36,9 +44,9 @@
 {
     [super viewDidLoad];
     
-    [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithRed:0.1 green:0.4 blue:0.7 alpha:1.0]];
+    [self.navigationController.navigationBar setBarTintColor:kLightBlueColor];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
-    self.navigationItem.title = @"Reddit";
+    self.navigationItem.title = @"Reddit /r/all";
 
     JBTableView *tableView = [[JBTableView alloc] initWithFrame:self.view.bounds];
     tableView.pullToRefreshViewClass = self.pullToRefreshViewClass;
@@ -46,10 +54,12 @@
     tableView.dataSource = self;
     tableView.delegate = self;
     [tableView registerClass:[RedditLinkTableViewCell class] forCellReuseIdentifier:kRedditLinkTableViewCellIdentifier];
+    tableView.minimumRefreshTime = 2.0;
     self.tableView = tableView;
     
+    __weak __typeof(self) weakself = self;
     [tableView setPullToRefreshBlock:^{
-        [self refreshLinks];
+        [weakself refreshLinks];
     }];
     
     [self.view addSubview:tableView];
@@ -66,9 +76,9 @@
 
 - (void)refreshLinks
 {
-    NSURL *frontURL = [NSURL URLWithString:@"http://www.reddit.com/hot/.json?count=25"];
+    NSURL *frontURL = [NSURL URLWithString:@"http://www.reddit.com/r/all/hot/.json?count=25"];
     
-    // The
+    // The tableView refresh animation must be started and stopped manually
     [self.tableView startRefreshing];
     
     __weak __typeof(self) weakself = self;
@@ -86,15 +96,11 @@
             } else {
                 [[[UIAlertView alloc] initWithTitle:nil message:[error description] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
             }
-            [weakself.tableView reloadData];
             
-            //            [weakself.tableView stopRefreshing];
+            [weakself.tableView reloadData];
+            [weakself.tableView stopRefreshing];
         });
     }];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [weakself.tableView stopRefreshing];
-    });
     
     [linkDataTask resume];
 }
@@ -103,7 +109,15 @@
 
 - (void)JBTableView:(JBTableView *)tableView willSetupPullToRefreshView:(UIView<JBPullToRefreshView> *)pullToRefreshView
 {
-    
+    // Using the JBTableViewPullToRefreshViewDelegate delegate method to set public properties on
+    // our pullToRefreshView before they're setuped by the JBTableView
+    if (tableView.pullToRefreshViewClass == [JBPullToRefreshView class]) {
+        [(JBPullToRefreshView *)pullToRefreshView setActivityIndicatorColor:kLightBlueColor];
+    } else if (tableView.pullToRefreshViewClass == [CirclePullToRefreshView class]) {
+        [(CirclePullToRefreshView *)pullToRefreshView setCircleColor:kLightBlueColor];
+    } else if (tableView.pullToRefreshViewClass == [BallsPullToRefreshView class]) {
+        [(BallsPullToRefreshView *)pullToRefreshView setBallsColor:kLightBlueColor];
+    }
 }
 
 #pragma mark - UITableViewDataSource

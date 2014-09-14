@@ -38,7 +38,6 @@
 		0996EFF119C2DEBF001338AF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		0996EFF219C2DEBF001338AF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		0996EFF419C2DEBF001338AF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		0996EFFB19C2DEC0001338AF /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		0996F00F19C2DEFD001338AF /* libJBTableView.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libJBTableView.a; path = "../build/Debug-iphoneos/libJBTableView.a"; sourceTree = "<group>"; };
 		0996F01719C2DFBC001338AF /* RedditLinkTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedditLinkTableViewCell.h; sourceTree = "<group>"; };
 		0996F01819C2DFBC001338AF /* RedditLinkTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedditLinkTableViewCell.m; sourceTree = "<group>"; };
@@ -89,7 +88,6 @@
 				0996EFE219C2DEBF001338AF /* Foundation.framework */,
 				0996EFE419C2DEBF001338AF /* CoreGraphics.framework */,
 				0996EFE619C2DEBF001338AF /* UIKit.framework */,
-				0996EFFB19C2DEC0001338AF /* XCTest.framework */,
 				687B471F78734B7097C7D523 /* libPods.a */,
 			);
 			name = Frameworks;
@@ -300,10 +298,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Reddit-PullToRefreshView/Reddit-PullToRefreshView-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"/Users/tehjord/Desktop/TEST/build/Debug-iphoneos",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -353,10 +348,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Reddit-PullToRefreshView/Reddit-PullToRefreshView-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"/Users/tehjord/Desktop/TEST/build/Debug-iphoneos",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",

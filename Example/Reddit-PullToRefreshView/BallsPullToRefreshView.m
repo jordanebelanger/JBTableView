@@ -32,13 +32,13 @@ static const CGFloat kGR = 1.61803398875;
 
 @implementation BallsPullToRefreshView
 
+#pragma mark - JBPullToRefreshView
+
 - (void)setup
 {
     _ballDiameter = 10.0;
     _ballHorizontalPadding = _ballDiameter / kGR;
     _scaleFactor = kGR;
-    _ballColorDefault = [UIColor colorWithRed:0.1 green:0.4 blue:0.7 alpha:1.0];
-    _ballColorActivated = [UIColor colorWithRed:0.1 green:0.4 blue:0.7 alpha:1.0];
 
     __weak __typeof(self) weakself = self;
     
@@ -77,8 +77,6 @@ static const CGFloat kGR = 1.61803398875;
     [self addSubview:rightBall];
 }
 
-#pragma mark - JBPullToRefreshView
-
 - (void)beginRefreshing
 {
     self.animating = YES;
@@ -111,11 +109,21 @@ static const CGFloat kGR = 1.61803398875;
 
 #pragma mark - Private
 
+- (UIColor *)ballsColor
+{
+    // Defaults the ballsColor to black if the JBTableViewPullToRefreshViewDelegate was not used to
+    // set the balls color before this pullToRefreshView's setup
+    if (!_ballsColor) {
+        _ballsColor = [UIColor blackColor];
+    }
+    return _ballsColor;
+}
+
 - (void)drawCircleInRect:(CGRect)rect
 {
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextAddEllipseInRect(ctx, rect);
-    CGContextSetFillColorWithColor(ctx, self.ballColorDefault.CGColor);
+    CGContextSetFillColorWithColor(ctx, self.ballsColor.CGColor);
     CGContextFillPath(ctx);
 }
 

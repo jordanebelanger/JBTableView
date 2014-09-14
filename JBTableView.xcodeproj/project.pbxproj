@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0956168319C3A31500EB1F77 /* JBPullToRefreshViewProtocol.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0996EF9719C2DA6A001338AF /* JBPullToRefreshViewProtocol.h */; };
+		0922297919C4E7BE0089BE09 /* JBPullToRefreshViewProtocol.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0996EF9719C2DA6A001338AF /* JBPullToRefreshViewProtocol.h */; };
+		0922297A19C4E7BE0089BE09 /* JBPullToRefreshView.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0996EF9519C2DA6A001338AF /* JBPullToRefreshView.h */; };
 		0996EF7019C2D9B4001338AF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0996EF6F19C2D9B4001338AF /* Foundation.framework */; };
 		0996EF7519C2D9B4001338AF /* JBTableView.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0996EF7419C2D9B4001338AF /* JBTableView.h */; };
 		0996EF7719C2D9B4001338AF /* JBTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0996EF7619C2D9B4001338AF /* JBTableView.m */; };
@@ -37,7 +38,8 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				0956168319C3A31500EB1F77 /* JBPullToRefreshViewProtocol.h in CopyFiles */,
+				0922297919C4E7BE0089BE09 /* JBPullToRefreshViewProtocol.h in CopyFiles */,
+				0922297A19C4E7BE0089BE09 /* JBPullToRefreshView.h in CopyFiles */,
 				0996EF7519C2D9B4001338AF /* JBTableView.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -116,9 +118,9 @@
 		0996EF7119C2D9B4001338AF /* JBTableView */ = {
 			isa = PBXGroup;
 			children = (
+				0996EF9719C2DA6A001338AF /* JBPullToRefreshViewProtocol.h */,
 				0996EF7419C2D9B4001338AF /* JBTableView.h */,
 				0996EF7619C2D9B4001338AF /* JBTableView.m */,
-				0996EF9719C2DA6A001338AF /* JBPullToRefreshViewProtocol.h */,
 				0996EF9519C2DA6A001338AF /* JBPullToRefreshView.h */,
 				0996EF9619C2DA6A001338AF /* JBPullToRefreshView.m */,
 				0996EF7219C2D9B4001338AF /* Supporting Files */,

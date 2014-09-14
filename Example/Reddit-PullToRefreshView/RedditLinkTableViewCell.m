@@ -47,7 +47,7 @@ static const CGFloat kVerticalPadding = 10.0;
 
 + (CGFloat)cellHeightForCellWidth:(CGFloat)cellWidth withLinkTitle:(NSString *)linkTitle
 {
-    CGFloat height = kVerticalPadding * 2; //top + bottom padding
+    CGFloat height = 2*kVerticalPadding; //top + bottom padding
     CGRect linkTitleBoundingRect = [linkTitle boundingRectWithSize:CGSizeMake(cellWidth - 2*kHorizontalPadding, CGFLOAT_MAX)
                                                            options:NSStringDrawingUsesLineFragmentOrigin
                                                         attributes:@{NSFontAttributeName: kLinkTitleFont} context:nil];

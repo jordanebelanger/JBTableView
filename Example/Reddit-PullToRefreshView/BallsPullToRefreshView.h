@@ -11,7 +11,6 @@
 
 @interface BallsPullToRefreshView : UIView <JBPullToRefreshView>
 
-@property (strong, nonatomic) UIColor *ballColorDefault;
-@property (strong, nonatomic) UIColor *ballColorActivated;
+@property (strong, nonatomic) UIColor *ballsColor;
 
 @end

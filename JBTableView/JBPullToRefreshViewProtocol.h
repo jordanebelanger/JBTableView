@@ -10,18 +10,19 @@
 
 // Use this protocol to create your own pullToRefreshView to be used in a JBTableView.
 // The protocol's methods are called at various time during your pullToRefreshView lifetime and should be used to
-// create your pullToRefreshView subviews, start and end animations an animation when the JBTableView is refreshing and modify the
+// create your pullToRefreshView subviews, start and end an animation when the JBTableView is refreshing and modify the
 // the pullToRefreshView as it is gradually shown on screen (a UILabel's text change from "pull" to "release" etc)
 //
 @protocol JBPullToRefreshView <NSObject>
 
-// JBTableView will call this method after initializing your JBPullToRefreshView, use this to add
-// subviews to your pullToRefreshView. The frame property of your pullToRefreshView is at its final size by the time this method is called.
+// JBTableView will call this method after initializing your JBPullToRefreshView, use it to add subviews to your pullToRefreshView.
+// The frame property of your pullToRefreshView is at its final size by the time this method is called
+// self.frame.width = tableView.frame.width and self.frame.height = your class' + (CGFloat)defaultHeight method result
 // You can use the "willSetupPullToRefreshView" method of JBTableView's JBPullToRefreshViewDelegate to set public properties on your pullToRefreshView before this method is called
 - (void)setup;
 
 // This is called by the JBTableView when it begins or end refreshing its pullToRefreshView. You should implement
-// these to start and stop your refreshing animation.
+// these to start and stop your refresh animation.
 - (void)beginRefreshing;
 - (void)endRefreshing;
 

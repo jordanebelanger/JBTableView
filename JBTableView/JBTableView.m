@@ -20,6 +20,7 @@
 @property (assign, nonatomic) BOOL pullToRefreshViewRespondsToPercentOfRefreshViewShown;
 
 @property (assign, nonatomic, getter = isRefreshing) BOOL refreshing;
+
 @property (assign, nonatomic) BOOL pullToRefreshViewNeedsLayout;
 
 @end
@@ -28,11 +29,39 @@
 
 @synthesize pullToRefreshViewClass = _pullToRefreshViewClass;
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        [self defaultSetup];
+    }
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self defaultSetup];
+    }
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame style:(UITableViewStyle)style
+{
+    self = [super initWithFrame:frame style:style];
+    if (self) {
+        [self defaultSetup];
+    }
+    return self;
+}
+
 - (instancetype)initWithPullToRefreshViewClass:(Class<JBPullToRefreshView>)pullToRefreshViewClass
 {
 	self = [super init];
     if (self) {
         self.pullToRefreshViewClass = pullToRefreshViewClass;
+        [self defaultSetup];
     }
     return self;
 }
@@ -42,6 +71,7 @@
     self = [super init];
     if (self) {
         self.pullToRefreshViewClass = pullToRefreshViewClass;
+        [self defaultSetup];
     }
     return self;
 }
@@ -51,8 +81,14 @@
     self = [super initWithFrame:frame style:style];
     if (self) {
         self.pullToRefreshViewClass = pullToRefreshViewClass;
+        [self defaultSetup];
     }
     return self;
+}
+
+- (void)defaultSetup
+{
+    self.minimumRefreshTime = 1.0;
 }
 
 #pragma mark - Private
@@ -107,6 +143,7 @@
     NSAssert([pullToRefreshView isKindOfClass:[UIView class]], @"Your JBPullToRefreshView Class must be a UIView subclass");
     NSAssert([pullToRefreshView conformsToProtocol:@protocol(JBPullToRefreshView)], @"Your JBPullToRefreshView Class must conform to the JBPullToRefreshView protocol");
     
+    [self.pullToRefreshViewDelegate JBTableView:self willSetupPullToRefreshView:pullToRefreshView];
     [pullToRefreshView setup];
     self.pullToRefreshView = pullToRefreshView;
 
@@ -129,37 +166,49 @@
     self.refreshing = NO; 
 }
 
-- (void)setRefreshing:(BOOL)animatingPullToRefresh
+- (void)setRefreshing:(BOOL)refreshing
 {
-    if (animatingPullToRefresh && !self.refreshing) {
-        [self.pullToRefreshView beginRefreshing];
-        UIEdgeInsets contentInset = self.contentInset;
-        CGPoint contentOffset = self.contentOffset;
-        
-        contentInset.top += CGRectGetHeight(self.pullToRefreshView.bounds);
-        contentOffset.y -= CGRectGetHeight(self.pullToRefreshView.bounds);
-        
-        [UIView animateWithDuration:0.4 delay:0.0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseOut animations:^{
-            self.contentInset = contentInset;
-            self.contentOffset = contentOffset;
-        } completion:nil];
-
-    } else if (!animatingPullToRefresh && self.refreshing) {
-        [self.pullToRefreshView endRefreshing];
-        UIEdgeInsets contentInset = self.contentInset;
-        CGPoint contentOffset = self.contentOffset;
-        
-        contentInset.top -= CGRectGetHeight(self.pullToRefreshView.bounds);
-        contentOffset.y += CGRectGetHeight(self.pullToRefreshView.bounds);
-        
-        [UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseOut animations:^{
-            self.contentInset = contentInset;
-            self.contentOffset = contentOffset;
-        } completion:^(BOOL finished) {
-        }];
+    if (refreshing) {
+        if (!_refreshing) {
+            UIEdgeInsets contentInset = self.contentInset;
+            CGPoint contentOffset = self.contentOffset;
+            
+            contentInset.top += CGRectGetHeight(self.pullToRefreshView.bounds);
+            contentOffset.y -= CGRectGetHeight(self.pullToRefreshView.bounds);
+            
+            [self.pullToRefreshView beginRefreshing];
+            __weak __typeof(self) weakself = self;
+            [UIView animateWithDuration:0.4 delay:0.0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseOut animations:^{
+                weakself.contentInset = contentInset;
+                weakself.contentOffset = contentOffset;
+            } completion:nil];
+        } else {
+            NSLog(@"Warning: Unbalanced call to beginRefreshing, make sure you call stopRefreshing before calling startRefreshing again and that the JBTableView refreshing property is FALSE at the moment beginRefreshing is called.");
+        }
+        _refreshing = YES;
+    } else {
+        if (_refreshing) {
+            // Calling a UIView animateWithDuration:delay animation will sometime freeze the initial contentInset refresh animation even with a non zero delay parameter.
+            // Using a dispatch_after block ensure the initial animation is not blocked 
+            __weak __typeof(self) weakself = self;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(_minimumRefreshTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                UIEdgeInsets contentInset = weakself.contentInset;
+                CGPoint contentOffset = weakself.contentOffset;
+                
+                contentInset.top -= CGRectGetHeight(weakself.pullToRefreshView.bounds);
+                contentOffset.y += CGRectGetHeight(weakself.pullToRefreshView.bounds);
+                [UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseOut animations:^{
+                    weakself.contentInset = contentInset;
+                    weakself.contentOffset = contentOffset;
+                } completion:^(BOOL finished) {
+                    [weakself.pullToRefreshView endRefreshing];
+                    _refreshing = NO;
+                }];
+            });
+        } else {
+            NSLog(@"Warning: Unbalanced call to endRefreshing, make sure you called beginRefreshing before calling endRefreshing");
+        }
     }
-    
-    _refreshing = animatingPullToRefresh;
 }
 
 #pragma mark - UITableViewDelegate
@@ -169,7 +218,6 @@
     CGFloat pullToRefreshViewHeight = CGRectGetHeight(_pullToRefreshView.bounds);
     CGFloat contentInsetTop = scrollView.contentInset.top;
     CGFloat contentOffSetY = scrollView.contentOffset.y;
-    
     CGFloat distanceFromTop = -(contentInsetTop + contentOffSetY + pullToRefreshViewHeight);
 
     if (_pullToRefreshViewRespondsToRefreshViewDistanceFromTableTop) {
@@ -178,7 +226,9 @@
     
     if (_pullToRefreshViewRespondsToPercentOfRefreshViewShown) {
         CGFloat percentShown = (distanceFromTop + pullToRefreshViewHeight) / pullToRefreshViewHeight;
-        if (percentShown < 0.0) {
+        if (_refreshing) {
+            percentShown = 1.0;
+        } else if (percentShown < 0.0) {
             percentShown = 0.0;
         } else if (percentShown > 1.0) {
             percentShown = 1.0;

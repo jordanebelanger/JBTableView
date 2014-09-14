@@ -16,24 +16,23 @@
 
 @implementation JBPullToRefreshView
 
+#pragma mark - JBPullToRefreshView
+
 - (void)setup
 {
     UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.activityIndicatorView = activityIndicatorView;
     
-    // Placing the UIActivityIndicatorView in the X center and Y bottom of the pullToRefreshView
     CGRect activityIndicatorViewFrame = CGRectMake((CGRectGetWidth(self.bounds) / 2) - (CGRectGetWidth(activityIndicatorView.bounds) / 2.0),
                                                    CGRectGetHeight(self.bounds) - CGRectGetWidth(activityIndicatorView.bounds),
                                                    CGRectGetWidth(activityIndicatorView.bounds),
                                                    CGRectGetHeight(activityIndicatorView.bounds));
     activityIndicatorView.frame = activityIndicatorViewFrame;
-    activityIndicatorView.color = [UIColor blackColor];
+    activityIndicatorView.color = self.activityIndicatorColor;
     activityIndicatorView.hidesWhenStopped = NO;
 
     [self addSubview:activityIndicatorView];
 }
-
-#pragma mark - JBPullToRefreshView
 
 - (void)beginRefreshing
 {
@@ -60,6 +59,17 @@
         
         self.activityIndicatorView.transform = finalTransform;
     }
+}
+
+#pragma mark - Private
+
+- (UIColor *)activityIndicatorColor
+{
+    // If no activityIndicator color was set by the JBTableViewPullToRefreshViewDelegate, the activityIndicator color defaults to black
+    if (!_activityIndicatorColor) {
+        _activityIndicatorColor = [UIColor blackColor];
+    }
+    return _activityIndicatorColor;
 }
 
 @end

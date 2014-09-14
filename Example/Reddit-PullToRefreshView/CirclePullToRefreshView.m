@@ -9,7 +9,7 @@
 #import "CirclePullToRefreshView.h"
 
 // UIView class that can gradually show a full circle, used to inform the user about when he can
-// release the pull to refresh view to refresh (when the circle is full)
+// release the pull to refresh view to initiate a pullToRefresh (when the circle is full)
 //
 @interface CirclePercentView : UIView
 
@@ -176,6 +176,16 @@
             });
         });
     }
+}
+
+- (UIColor *)ballsColor
+{
+    // Defaults the circleColor to black if the JBTableViewPullToRefreshViewDelegate was not used to
+    // set the balls color before this pullToRefreshView's setup
+    if (!_circleColor) {
+        _circleColor = [UIColor blackColor];
+    }
+    return _circleColor;
 }
 
 - (void)generateAnimatedCircleImageWithRect:(CGRect)rect

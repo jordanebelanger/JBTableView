@@ -10,6 +10,9 @@
 
 @protocol JBPullToRefreshView;
 
+// This view controller shows the 25 latest links of the /r/all subreddit using a JBTableView
+// using a variety of pullToRefreshView classes
+//
 @interface RedditViewController : UIViewController
 
 - (instancetype)initWithPullToRefreshViewClass:(Class<JBPullToRefreshView>)pullToRefreshViewClass;
