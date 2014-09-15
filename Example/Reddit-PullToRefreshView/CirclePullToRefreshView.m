@@ -112,7 +112,7 @@
 
 - (void)percentOfRefreshViewShown:(CGFloat)percentageShown;
 {
-	_percentCircleView.percentShown = percentageShown;
+    _percentCircleView.percentShown = percentageShown;
     if (!self.animatingCircle) {
         _animatedCircleImageView.hidden = YES;
         _percentCircleView.hidden = NO;
