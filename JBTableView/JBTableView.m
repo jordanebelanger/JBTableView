@@ -162,56 +162,48 @@
 
 - (void)startRefreshing
 {
-    self.refreshing = YES;
+    if (!_refreshing) {
+        UIEdgeInsets contentInset = self.contentInset;
+        CGPoint contentOffset = self.contentOffset;
+        
+        contentInset.top += CGRectGetHeight(self.pullToRefreshView.bounds);
+        contentOffset.y -= CGRectGetHeight(self.pullToRefreshView.bounds);
+        
+        [_pullToRefreshView beginRefreshing];
+        
+        __weak __typeof(self) weakself = self;
+        [UIView animateWithDuration:0.4 delay:0.0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseOut animations:^{
+            weakself.contentInset = contentInset;
+            weakself.contentOffset = contentOffset;
+        } completion:nil];
+    } else {
+        NSLog(@"Warning: Unbalanced call to beginRefreshing, make sure you call stopRefreshing before calling startRefreshing again and that the JBTableView refreshing property is FALSE at the moment beginRefreshing is called.");
+    }
+    _refreshing = YES;
 }
 
 - (void)stopRefreshing
 {
-    self.refreshing = NO; 
-}
-
-- (void)setRefreshing:(BOOL)refreshing
-{
-    if (refreshing) {
-        if (!_refreshing) {
-            UIEdgeInsets contentInset = self.contentInset;
-            CGPoint contentOffset = self.contentOffset;
+    if (_refreshing) {
+        // Calling a UIView animateWithDuration:delay animation will sometime freeze the initial contentInset refresh animation even with a non zero delay parameter.
+        // Using a dispatch_after block ensure the initial animation is not blocked
+        __weak __typeof(self) weakself = self;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(weakself.minimumRefreshTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            UIEdgeInsets contentInset = weakself.contentInset;
+            CGPoint contentOffset = weakself.contentOffset;
             
-            contentInset.top += CGRectGetHeight(self.pullToRefreshView.bounds);
-            contentOffset.y -= CGRectGetHeight(self.pullToRefreshView.bounds);
-            
-            [self.pullToRefreshView beginRefreshing];
-            __weak __typeof(self) weakself = self;
-            [UIView animateWithDuration:0.4 delay:0.0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseOut animations:^{
+            contentInset.top -= CGRectGetHeight(weakself.pullToRefreshView.bounds);
+            contentOffset.y += CGRectGetHeight(weakself.pullToRefreshView.bounds);
+            [UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseIn animations:^{
                 weakself.contentInset = contentInset;
                 weakself.contentOffset = contentOffset;
-            } completion:nil];
-        } else {
-            NSLog(@"Warning: Unbalanced call to beginRefreshing, make sure you call stopRefreshing before calling startRefreshing again and that the JBTableView refreshing property is FALSE at the moment beginRefreshing is called.");
-        }
-        _refreshing = YES;
+            } completion:^(BOOL finished) {
+                [weakself.pullToRefreshView endRefreshing];
+                weakself.refreshing = NO;
+            }];
+        });
     } else {
-        if (_refreshing) {
-            // Calling a UIView animateWithDuration:delay animation will sometime freeze the initial contentInset refresh animation even with a non zero delay parameter.
-            // Using a dispatch_after block ensure the initial animation is not blocked 
-            __weak __typeof(self) weakself = self;
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(_minimumRefreshTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                UIEdgeInsets contentInset = weakself.contentInset;
-                CGPoint contentOffset = weakself.contentOffset;
-                
-                contentInset.top -= CGRectGetHeight(weakself.pullToRefreshView.bounds);
-                contentOffset.y += CGRectGetHeight(weakself.pullToRefreshView.bounds);
-                [UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseIn animations:^{
-                    weakself.contentInset = contentInset;
-                    weakself.contentOffset = contentOffset;
-                } completion:^(BOOL finished) {
-                    [weakself.pullToRefreshView endRefreshing];
-                    if (_refreshing) _refreshing = NO;
-                }];
-            });
-        } else {
-            NSLog(@"Warning: Unbalanced call to endRefreshing, make sure you called beginRefreshing before calling endRefreshing");
-        }
+        NSLog(@"Warning: Unbalanced call to endRefreshing, make sure you called beginRefreshing before calling endRefreshing");
     }
 }
 
