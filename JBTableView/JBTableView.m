@@ -133,20 +133,22 @@
         self.pullToRefreshView = nil;
     }
     
+    UIView<JBPullToRefreshView> *pullToRefreshView = [[self.pullToRefreshViewClass alloc] init];
+    
+    NSAssert([pullToRefreshView isKindOfClass:[UIView class]], @"Your JBPullToRefreshView Class must be a UIView subclass");
+    NSAssert([pullToRefreshView conformsToProtocol:@protocol(JBPullToRefreshView)], @"Your JBPullToRefreshView Class must conform to the JBPullToRefreshView protocol");
+    
     CGFloat pullToRefreshViewHeight = [self.pullToRefreshViewClass defaultHeight];
     CGFloat pullToRefreshViewWidth = CGRectGetWidth(self.bounds);
     CGRect pullToRefreshViewFrame = CGRectMake(0.0f,
                                                -pullToRefreshViewHeight,
                                                pullToRefreshViewWidth,
                                                pullToRefreshViewHeight);
-    
-    UIView<JBPullToRefreshView> *pullToRefreshView = [[self.pullToRefreshViewClass alloc] initWithFrame:pullToRefreshViewFrame];
-    
-    NSAssert([pullToRefreshView isKindOfClass:[UIView class]], @"Your JBPullToRefreshView Class must be a UIView subclass");
-    NSAssert([pullToRefreshView conformsToProtocol:@protocol(JBPullToRefreshView)], @"Your JBPullToRefreshView Class must conform to the JBPullToRefreshView protocol");
+    pullToRefreshView.frame = pullToRefreshViewFrame;
     
     [self.pullToRefreshViewDelegate JBTableView:self willSetupPullToRefreshView:pullToRefreshView];
     [pullToRefreshView setup];
+    
     self.pullToRefreshView = pullToRefreshView;
 
     self.pullToRefreshViewRespondsToRefreshViewDistanceFromTableTop = [pullToRefreshView respondsToSelector:@selector(refreshViewDistanceFromTableTop:)];
@@ -204,7 +206,7 @@
                     weakself.contentOffset = contentOffset;
                 } completion:^(BOOL finished) {
                     [weakself.pullToRefreshView endRefreshing];
-                    _refreshing = NO;
+                    if (_refreshing) _refreshing = NO;
                 }];
             });
         } else {
