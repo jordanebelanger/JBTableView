@@ -197,7 +197,7 @@
                 
                 contentInset.top -= CGRectGetHeight(weakself.pullToRefreshView.bounds);
                 contentOffset.y += CGRectGetHeight(weakself.pullToRefreshView.bounds);
-                [UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseOut animations:^{
+                [UIView animateWithDuration:0.15 delay:0.0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseIn animations:^{
                     weakself.contentInset = contentInset;
                     weakself.contentOffset = contentOffset;
                 } completion:^(BOOL finished) {

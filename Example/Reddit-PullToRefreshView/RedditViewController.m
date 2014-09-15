@@ -54,7 +54,6 @@ static UIColor *kLightBlueColor;
     tableView.dataSource = self;
     tableView.delegate = self;
     [tableView registerClass:[RedditLinkTableViewCell class] forCellReuseIdentifier:kRedditLinkTableViewCellIdentifier];
-    tableView.minimumRefreshTime = 2.0;
     self.tableView = tableView;
     
     __weak __typeof(self) weakself = self;
@@ -69,7 +68,9 @@ static UIColor *kLightBlueColor;
 {
     [super viewDidAppear:animated];
     
-    [self refreshLinks];
+    if ([self.links count] == 0) {
+        [self refreshLinks];
+    }
 }
 
 #pragma mark - Private
@@ -87,7 +88,6 @@ static UIColor *kLightBlueColor;
             if (!error) {
                 NSError *jsonParsingError;
                 NSDictionary *jsonResponse = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonParsingError];
-                
                 if (jsonParsingError) {
                     [[[UIAlertView alloc] initWithTitle:nil message:[jsonParsingError description] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
                 } else {
@@ -139,6 +139,11 @@ static UIColor *kLightBlueColor;
 }
 
 #pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 40.0;
+}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {

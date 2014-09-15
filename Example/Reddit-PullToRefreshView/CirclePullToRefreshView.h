@@ -9,6 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "JBTableView/JBPullToRefreshViewProtocol.h"
 
+// Gradually show a full circle as the pullToRequestView is pulled down.
+// When this pullToRefreshView begins refreshing, a gradient colored circle is shown spinning
+// instead of the normal full color circle (the CirclePercentView instance)
+//
 @interface CirclePullToRefreshView : UIView <JBPullToRefreshView>
 
 @property (strong, nonatomic) UIColor *circleColor;

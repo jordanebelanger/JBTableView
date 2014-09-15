@@ -107,7 +107,7 @@ static const CGFloat kGR = 1.61803398875;
     return 40.0;
 }
 
-#pragma mark - Private
+#pragma mark - Public
 
 - (UIColor *)ballsColor
 {
@@ -118,6 +118,8 @@ static const CGFloat kGR = 1.61803398875;
     }
     return _ballsColor;
 }
+
+#pragma mark - Private
 
 - (void)drawCircleInRect:(CGRect)rect
 {

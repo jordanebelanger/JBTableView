@@ -17,9 +17,10 @@
 - (instancetype)initWithFrame:(CGRect)frame pullToRefreshViewClass:(Class<JBPullToRefreshView>)pullToRefreshViewClass;
 - (instancetype)initWithFrame:(CGRect)frame style:(UITableViewStyle)style pullToRefreshViewClass:(Class<JBPullToRefreshView>)pullToRefreshViewClass;
 
-// The class used to instantiate the table's pullToRefreshView, you can change it at anytime during your tableView's lifetime
-// This class must be a UIView subclass comforming to the JBPullToRefreshView protocol
+// The class used when instantiating the pullToRefreshView, you can change it at anytime during your tableView's lifetime
+// The pullToRefreshView class must be a UIView subclass comforming to the JBPullToRefreshView protocol
 @property (assign, nonatomic) Class pullToRefreshViewClass;
+
 @property (weak, nonatomic) id<JBTableViewPullToRefreshViewDelegate> pullToRefreshViewDelegate;
 
 // This block is called when a pullToRefresh is triggered by the user
@@ -34,8 +35,8 @@
 // Hides the pullToRefreshView over the top of the table after which the pullToRefreshView animation will be stopped
 - (void)stopRefreshing;
 
-// This property is TRUE after you call startRefreshing until stopRefreshing is called and the
-// pullToRefreshView hiding animation fully execute. There might be a delay between the time
+// This property is TRUE after you call startRefreshing. This property becomes FALSE once stopRefreshing is called and the
+// pullToRefreshView hiding animation has fully executed. There might be a delay between the time
 // you call stopRefreshing and the time this property is FALSE depending on your tableView's minimumRefreshTime
 @property (assign, nonatomic, readonly, getter = isRefreshing) BOOL refreshing;
 
@@ -43,7 +44,7 @@
 
 @protocol JBTableViewPullToRefreshViewDelegate <NSObject>
 
-// Use to set public properties on your pullToRefreshView before its subviews are setuped
+// Use to set public properties on your pullToRefreshView before its subviews are initialized
 - (void)JBTableView:(JBTableView *)tableView willSetupPullToRefreshView:(UIView<JBPullToRefreshView> *)pullToRefreshView;
 
 @end

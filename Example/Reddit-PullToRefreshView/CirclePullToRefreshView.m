@@ -8,7 +8,7 @@
 
 #import "CirclePullToRefreshView.h"
 
-// UIView class that can gradually show a full circle, used to inform the user about when he can
+// UIView that gradually shows a full circle, used to inform the user about when he can
 // release the pull to refresh view to initiate a pullToRefresh (when the circle is full)
 //
 @interface CirclePercentView : UIView
@@ -39,7 +39,7 @@
     
     CGAffineTransform ovalTransform = CGAffineTransformMakeTranslation(CGRectGetMidX(rect), CGRectGetMidY(rect));
     ovalTransform = CGAffineTransformScale(ovalTransform, 1, CGRectGetHeight(rect) / CGRectGetWidth(rect));
-    [ovalPath applyTransform: ovalTransform];
+    [ovalPath applyTransform:ovalTransform];
     
     [self.circleColor setStroke];
     ovalPath.lineWidth = self.circleWidth;
@@ -50,10 +50,6 @@
 
 
 
-// Gradually show a full circle as the pullToRequestView is pulled down.
-// When this pullToRefreshView begins refreshing, a gradient colored circle is shown spinning
-// instead of the normal full color circle (the CirclePercentView instance)
-//
 @interface CirclePullToRefreshView ()
 
 @property (assign, nonatomic) CGFloat percentShown;
@@ -78,7 +74,7 @@
 {
     _drawQueue = dispatch_queue_create("Draw Queue", DISPATCH_QUEUE_SERIAL);
     _animatedCircleImageNeedsDrawing = YES;
-    _circleColor = [UIColor colorWithRed:0.1 green:0.4 blue:0.7 alpha:1.0];
+    _circleColor = self.circleColor;
     _circleWidth = 2.5;
     
     CGFloat circleDiameter = 21.0;
@@ -134,6 +130,16 @@
 
 #pragma mark - Public
 
+- (UIColor *)ballsColor
+{
+    // Defaults the circleColor to black if the JBTableViewPullToRefreshViewDelegate was not used to
+    // set the balls color before this pullToRefreshView's setup
+    if (!_circleColor) {
+        _circleColor = [UIColor blackColor];
+    }
+    return _circleColor;
+}
+
 - (void)setCircleColor:(UIColor *)circleColor
 {
     self.percentCircleView.circleColor = circleColor;
@@ -148,15 +154,13 @@
     _circleWidth = circleWidth;
 }
 
-- (void)rotateAnimatedCircleImageView
+#pragma mark - CAAnimationDelegate
+
+- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
 {
-    CABasicAnimation *rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-    rotationAnimation.delegate = self;
-    rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 2.0];
-    rotationAnimation.duration = 0.6;
-    rotationAnimation.repeatCount = 0.0;
-    
-    [self.animatedCircleImageView.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
+    if (self.isAnimatingCircle) {
+        [self rotateAnimatedCircleImageView];
+    }
 }
 
 #pragma mark - Private
@@ -178,14 +182,15 @@
     }
 }
 
-- (UIColor *)ballsColor
+- (void)rotateAnimatedCircleImageView
 {
-    // Defaults the circleColor to black if the JBTableViewPullToRefreshViewDelegate was not used to
-    // set the balls color before this pullToRefreshView's setup
-    if (!_circleColor) {
-        _circleColor = [UIColor blackColor];
-    }
-    return _circleColor;
+    CABasicAnimation *rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    rotationAnimation.delegate = self;
+    rotationAnimation.toValue = [NSNumber numberWithFloat:M_PI * 2.0];
+    rotationAnimation.duration = 0.6;
+    rotationAnimation.repeatCount = 0.0;
+    
+    [self.animatedCircleImageView.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
 }
 
 - (void)generateAnimatedCircleImageWithRect:(CGRect)rect
@@ -205,7 +210,7 @@
     CGRect ovalRect = rect;
     UIBezierPath* ovalPath = UIBezierPath.bezierPath;
     [ovalPath addArcWithCenter:CGPointMake(CGRectGetMidX(ovalRect), CGRectGetMidY(ovalRect)) radius: CGRectGetWidth(ovalRect) / 2 startAngle: 45 * M_PI/180 endAngle: 0 * M_PI/180 clockwise: YES];
-    [ovalPath addLineToPoint: CGPointMake(CGRectGetMidX(ovalRect), CGRectGetMidY(ovalRect))];
+    [ovalPath addLineToPoint:CGPointMake(CGRectGetMidX(ovalRect), CGRectGetMidY(ovalRect))];
     [ovalPath closePath];
     
     CGContextSaveGState(context);
@@ -223,13 +228,6 @@
     
     CGGradientRelease(gradient);
     CGColorSpaceRelease(colorSpace);
-}
-
-- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
-{
-    if (self.isAnimatingCircle) {
-        [self rotateAnimatedCircleImageView];
-    }
 }
 
 @end
