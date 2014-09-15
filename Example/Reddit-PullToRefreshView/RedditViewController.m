@@ -79,7 +79,7 @@ static UIColor *kLightBlueColor;
 {
     NSURL *frontURL = [NSURL URLWithString:@"http://www.reddit.com/r/all/hot/.json?count=25"];
     
-    // The tableView refresh animation must be started and stopped manually
+    // Start the pullToRefreshView animation
     [self.tableView startRefreshing];
     
     __weak __typeof(self) weakself = self;
@@ -98,6 +98,8 @@ static UIColor *kLightBlueColor;
             }
             
             [weakself.tableView reloadData];
+            
+            // Stop the pullToRefreshView animation
             [weakself.tableView stopRefreshing];
         });
     }];
@@ -139,11 +141,6 @@ static UIColor *kLightBlueColor;
 }
 
 #pragma mark - UITableViewDelegate
-
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 40.0;
-}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {

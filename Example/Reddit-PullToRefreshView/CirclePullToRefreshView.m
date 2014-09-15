@@ -8,7 +8,7 @@
 
 #import "CirclePullToRefreshView.h"
 
-// UIView that gradually shows a full circle, used to inform the user about when he can
+// Private UIView that gradually shows a full circle, used to inform the user about when he can
 // release the pull to refresh view to initiate a pullToRefresh (when the circle is full)
 //
 @interface CirclePercentView : UIView

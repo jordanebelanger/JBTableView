@@ -88,6 +88,7 @@
 
 - (void)defaultSetup
 {
+    self.pullToRefreshViewNeedsLayout = YES;
     self.minimumRefreshTime = 1.0;
 }
 
@@ -95,12 +96,12 @@
 
 - (void)layoutSubviews
 {
+    [super layoutSubviews];
+
     if (self.pullToRefreshViewNeedsLayout) {
         self.pullToRefreshViewNeedsLayout = NO;
         [self setupPullToRefreshView];
     }
-    
-    [super layoutSubviews];
 }
 
 - (void)setFrame:(CGRect)frame
@@ -121,6 +122,7 @@
 - (void)setPullToRefreshViewClass:(Class)pullToRefreshViewClass
 {
     _pullToRefreshViewClass = pullToRefreshViewClass;
+    
     self.pullToRefreshViewNeedsLayout = YES;
 }
 
