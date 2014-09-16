@@ -20,7 +20,7 @@
 @property (assign, nonatomic) BOOL pullToRefreshViewRespondsToPercentOfRefreshViewShown;
 
 @property (assign, nonatomic, getter = isRefreshing) BOOL refreshing;
-
+@property (assign, nonatomic) BOOL endRefreshingQueued;
 @property (assign, nonatomic) BOOL pullToRefreshViewNeedsLayout;
 
 @end
@@ -177,14 +177,17 @@
             weakself.contentOffset = contentOffset;
         } completion:nil];
     } else {
-        NSLog(@"Warning: Unbalanced call to beginRefreshing, make sure you call stopRefreshing before calling startRefreshing again and that the JBTableView refreshing property is FALSE at the moment beginRefreshing is called.");
+        NSLog(@"Warning: Unbalanced call to startRefreshing, make sure you call stopRefreshing before calling startRefreshing again and that the JBTableView refreshing property is FALSE at the moment startRefreshing is called.");
     }
     _refreshing = YES;
 }
 
 - (void)stopRefreshing
 {
-    if (_refreshing) {
+    if (_endRefreshingQueued) {
+        NSLog(@"Warning: Unbalanced call to stopRefreshing, make sure the initial stopRefreshing animation had time to stop before calling stopRefreshing again");
+    } else if (_refreshing) {
+        _endRefreshingQueued = YES;
         // Calling a UIView animateWithDuration:delay animation will sometime freeze the initial contentInset refresh animation even with a non zero delay parameter.
         // Using a dispatch_after block ensure the initial animation is not blocked
         __weak __typeof(self) weakself = self;
@@ -200,10 +203,11 @@
             } completion:^(BOOL finished) {
                 [weakself.pullToRefreshView endRefreshing];
                 weakself.refreshing = NO;
+                _endRefreshingQueued = NO;
             }];
         });
     } else {
-        NSLog(@"Warning: Unbalanced call to endRefreshing, make sure you called beginRefreshing before calling endRefreshing");
+        NSLog(@"Warning: Unbalanced call to stopRefreshing, make sure you called startRefreshing before calling stopRefreshing");
     }
 }
 
