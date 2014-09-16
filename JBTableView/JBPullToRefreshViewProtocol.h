@@ -15,7 +15,7 @@
 //
 @protocol JBPullToRefreshView <NSObject>
 
-// JBTableView will call this method after initializing your JBPullToRefreshView, use it to add subviews to your pullToRefreshView.
+// JBTableView will call this method after initializing your JBPullToRefreshView. Use it to add subviews to your pullToRefreshView.
 // The frame property of your pullToRefreshView is at its final size by the time this method is called
 // self.frame.width = tableView.frame.width and self.frame.height = the (CGFloat)defaultHeight method result
 // You can use the "willSetupPullToRefreshView" method of JBTableView's JBPullToRefreshViewDelegate to set public properties on your pullToRefreshView before setup is called

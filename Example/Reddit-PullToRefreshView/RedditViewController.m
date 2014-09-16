@@ -98,7 +98,7 @@ static UIColor *kLightBlueColor;
             }
             
             [weakself.tableView reloadData];
-            
+
             // Stop the pullToRefreshView animation
             [weakself.tableView stopRefreshing];
         });

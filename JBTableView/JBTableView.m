@@ -88,6 +88,7 @@
 
 - (void)defaultSetup
 {
+    self.delegate = self;
     self.pullToRefreshViewNeedsLayout = YES;
     self.minimumRefreshTime = 1.0;
 }
@@ -256,7 +257,15 @@
 
 - (void)setDelegate:(id<UITableViewDelegate>)delegate
 {
-    if (delegate == self) return;
+    if (delegate == self && !self.delegate) {
+        [super setDelegate:self];
+        return;
+    } else if (delegate == self) {
+        return;
+    }
+    
+    // Reseting the UITableView delegate selector responses cache
+    [super setDelegate:nil];
     
     self.publicDelegate = delegate;
     
