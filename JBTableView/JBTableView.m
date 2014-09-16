@@ -203,7 +203,7 @@
             } completion:^(BOOL finished) {
                 [weakself.pullToRefreshView endRefreshing];
                 weakself.refreshing = NO;
-                _endRefreshingQueued = NO;
+                weakself.endRefreshingQueued = NO;
             }];
         });
     } else {
