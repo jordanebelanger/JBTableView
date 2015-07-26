@@ -69,9 +69,7 @@ static UIColor *kLightBlueColor;
 {
     [super viewDidAppear:animated];
     
-    if ([self.links count] == 0) {
-        [self refreshLinks];
-    }
+    [self refreshLinks];
 }
 
 #pragma mark - Private
