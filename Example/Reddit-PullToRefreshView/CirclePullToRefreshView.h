@@ -16,5 +16,6 @@
 @interface CirclePullToRefreshView : UIView <JBPullToRefreshView>
 
 @property (strong, nonatomic) UIColor *circleColor;
+@property (assign, nonatomic) CGFloat circleWidth;
 
 @end

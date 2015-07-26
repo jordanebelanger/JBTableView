@@ -53,6 +53,7 @@ static UIColor *kLightBlueColor;
     tableView.pullToRefreshViewDelegate = self;
     tableView.dataSource = self;
     tableView.delegate = self;
+    tableView.minimumRefreshTimeInMs = 1500;
     [tableView registerClass:[RedditLinkTableViewCell class] forCellReuseIdentifier:kRedditLinkTableViewCellIdentifier];
     self.tableView = tableView;
     

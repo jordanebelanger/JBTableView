@@ -90,7 +90,7 @@
 {
     self.delegate = self;
     self.pullToRefreshViewNeedsLayout = YES;
-    self.minimumRefreshTime = 1.0;
+    self.minimumRefreshTimeInMs = 1000;
 }
 
 #pragma mark - Private
@@ -192,7 +192,7 @@
         // Calling a UIView animateWithDuration:delay animation will sometime freeze the initial contentInset refresh animation even with a non zero delay parameter.
         // Using a dispatch_after block ensure the initial animation is not blocked
         __weak __typeof(self) weakself = self;
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(weakself.minimumRefreshTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(weakself.minimumRefreshTimeInMs * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
             UIEdgeInsets contentInset = weakself.contentInset;
             CGPoint contentOffset = weakself.contentOffset;
             

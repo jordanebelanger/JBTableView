@@ -53,7 +53,6 @@
 @interface CirclePullToRefreshView ()
 
 @property (assign, nonatomic) CGFloat percentShown;
-@property (assign, nonatomic) CGFloat circleWidth;
 
 @property (strong, nonatomic) UIImageView *animatedCircleImageView;
 @property (strong, nonatomic) CirclePercentView *percentCircleView;
@@ -68,14 +67,14 @@
 
 @implementation CirclePullToRefreshView
 
+@synthesize circleColor = _circleColor;
+@synthesize circleWidth = _circleWidth;
 #pragma mark - JBPullToRefreshView
 
 - (void)setup
 {
     _drawQueue = dispatch_queue_create("Draw Queue", DISPATCH_QUEUE_SERIAL);
     _animatedCircleImageNeedsDrawing = YES;
-    _circleColor = self.circleColor;
-    _circleWidth = 2.5;
     
     CGFloat circleDiameter = 21.0;
     CGRect circleViewFrame = CGRectMake((CGRectGetWidth(self.bounds) / 2.0) - (circleDiameter / 2.0),
@@ -85,8 +84,8 @@
     CirclePercentView *percentCircleView = [[CirclePercentView alloc] initWithFrame:circleViewFrame];
     percentCircleView.backgroundColor = [UIColor clearColor];
     percentCircleView.percentShown = 0.0;
-    percentCircleView.circleWidth = _circleWidth;
-    percentCircleView.circleColor = _circleColor;
+    percentCircleView.circleWidth = self.circleWidth;
+    percentCircleView.circleColor = self.circleColor;
     _percentCircleView = percentCircleView;
     
     UIImageView *animatedCircleImageView = [[UIImageView alloc] initWithFrame:circleViewFrame];
@@ -130,7 +129,7 @@
 
 #pragma mark - Public
 
-- (UIColor *)ballsColor
+- (UIColor *)circleColor
 {
     // Defaults the circleColor to black if the JBTableViewPullToRefreshViewDelegate was not used to
     // set the balls color before this pullToRefreshView's setup
@@ -145,6 +144,14 @@
     self.percentCircleView.circleColor = circleColor;
     self.animatedCircleImageNeedsDrawing = YES;
     _circleColor = circleColor;
+}
+
+- (CGFloat)circleWidth
+{
+    if (!_circleWidth) {
+        _circleWidth = 2.5;
+    }
+    return _circleWidth;
 }
 
 - (void)setCircleWidth:(CGFloat)circleWidth

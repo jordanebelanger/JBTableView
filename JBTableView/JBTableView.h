@@ -26,8 +26,8 @@
 // This block is called when a pullToRefresh is triggered by the user
 @property (copy, nonatomic) void (^pullToRefreshBlock)(void);
 
-// default is 1 second. Use to ensure your refresh animation is shown for a minimum amount of time even if your refresh cycle is very short
-@property (assign, nonatomic) NSTimeInterval minimumRefreshTime;
+// default is 1000 Ms. Use to ensure your refresh animation is shown for a minimum amount of time even if your refresh cycle is very short
+@property (assign, nonatomic) NSTimeInterval minimumRefreshTimeInMs;
 
 // Shows your pullToRefreshView under the top of the table and starts the pullToRefreshView animation
 - (void)startRefreshing;
