@@ -3,7 +3,7 @@ PODS:
   - UIViewDrawRectBlock (0.0.1)
 
 DEPENDENCIES:
-  - pop (~> 1.0.6)
+  - pop (~> 1.0.8)
   - UIViewDrawRectBlock
 
 SPEC CHECKSUMS:
