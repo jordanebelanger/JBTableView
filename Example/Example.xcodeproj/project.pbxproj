@@ -43,8 +43,9 @@
 		0996F01819C2DFBC001338AF /* RedditLinkTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedditLinkTableViewCell.m; sourceTree = "<group>"; };
 		0996F01919C2DFBC001338AF /* RedditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedditViewController.h; sourceTree = "<group>"; };
 		0996F01A19C2DFBC001338AF /* RedditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedditViewController.m; sourceTree = "<group>"; };
-		551FDA5650664D0DBEAA4534 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = ../Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		687B471F78734B7097C7D523 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		803BD58575DEB5CE406316D1 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "../Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		A98409F61E0D54DE4DF58155 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "../Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,7 +70,7 @@
 				0996EFE819C2DEBF001338AF /* Reddit-PullToRefreshView */,
 				0996EFE119C2DEBF001338AF /* Frameworks */,
 				0996EFE019C2DEBF001338AF /* Products */,
-				551FDA5650664D0DBEAA4534 /* Pods.xcconfig */,
+				B79A4FD17E60EE2BB884226A /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -123,6 +124,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		B79A4FD17E60EE2BB884226A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A98409F61E0D54DE4DF58155 /* Pods.debug.xcconfig */,
+				803BD58575DEB5CE406316D1 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -151,7 +161,7 @@
 		0996EFD519C2DE3D001338AF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0710;
 			};
 			buildConfigurationList = 0996EFD819C2DE3D001338AF /* Build configuration list for PBXProject "Example" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -210,7 +220,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -246,6 +256,7 @@
 		0996EFD919C2DE3D001338AF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ENABLE_TESTABILITY = YES;
 				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
@@ -258,7 +269,7 @@
 		};
 		0996F00919C2DEC0001338AF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 551FDA5650664D0DBEAA4534 /* Pods.xcconfig */;
+			baseConfigurationReference = A98409F61E0D54DE4DF58155 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -306,6 +317,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tehjord.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -315,7 +327,7 @@
 		};
 		0996F00A19C2DEC0001338AF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 551FDA5650664D0DBEAA4534 /* Pods.xcconfig */;
+			baseConfigurationReference = 803BD58575DEB5CE406316D1 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -355,6 +367,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tehjord.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

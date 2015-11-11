@@ -10,11 +10,19 @@
 
 @protocol JBPullToRefreshView;
 
-// This view controller shows the 25 latest links of the /r/all subreddit using a JBTableView
-// using a variety of pullToRefreshView classes
-//
+typedef void (^PullToRefreshViewCustomizationBlock)(UIView<JBPullToRefreshView> *pullToRefreshView);
+
 @interface RedditViewController : UIViewController
 
-- (instancetype)initWithPullToRefreshViewClass:(Class<JBPullToRefreshView>)pullToRefreshViewClass;
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_UNAVAILABLE;
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_UNAVAILABLE;
+
+- (instancetype)initWithDefaultColor:(UIColor *)color
+              pullToRefreshViewClass:(Class<JBPullToRefreshView>)pullToRefreshViewClass
+                                 subredditLink:(NSString *)subredditLink
+               pullToRefreshCustomizationBlock:(PullToRefreshViewCustomizationBlock)customizationBlock;
+
+@property (strong, nonatomic, readonly) NSString *subredditLink;
 
 @end

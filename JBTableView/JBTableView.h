@@ -35,9 +35,6 @@
 // Hides the pullToRefreshView over the top of the table after which the pullToRefreshView animation will be stopped
 - (void)stopRefreshing;
 
-// This property is TRUE after you call startRefreshing. This property becomes FALSE once stopRefreshing is called and the
-// pullToRefreshView hiding animation has fully executed. There might be a delay between the time
-// you call stopRefreshing and the time this property is FALSE depending on your tableView's minimumRefreshTime
 @property (assign, nonatomic, readonly, getter = isRefreshing) BOOL refreshing;
 
 @end

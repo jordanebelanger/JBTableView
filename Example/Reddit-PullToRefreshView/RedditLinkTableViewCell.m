@@ -26,7 +26,6 @@ static const CGFloat kVerticalPadding = 10.0;
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.textLabel.font = kLinkTitleFont;
-        self.textLabel.textColor = [UIColor colorWithRed:0.1 green:0.4 blue:0.7 alpha:1.0];
         self.textLabel.numberOfLines = 0;
     }
     return self;
@@ -44,6 +43,12 @@ static const CGFloat kVerticalPadding = 10.0;
 }
 
 #pragma mark - Public
+
+- (void)setDefaultColor:(UIColor *)defaultColor {
+    _defaultColor = defaultColor;
+    
+    self.textLabel.textColor = defaultColor;
+}
 
 + (CGFloat)cellHeightForCellWidth:(CGFloat)cellWidth withLinkTitle:(NSString *)linkTitle
 {

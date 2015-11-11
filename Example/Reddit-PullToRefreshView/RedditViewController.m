@@ -13,11 +13,12 @@
 #import "CirclePullToRefreshView.h"
 #import "BallsPullToRefreshView.h"
 
-static UIColor *kLightBlueColor;
-
 @interface RedditViewController () <UITableViewDataSource, UITableViewDelegate, JBTableViewPullToRefreshViewDelegate>
 
+@property (strong, nonatomic) UIColor *defaultColor;
 @property (assign, nonatomic) Class pullToRefreshViewClass;
+@property (strong, nonatomic) NSString *subredditLink;
+@property (copy, nonatomic) PullToRefreshViewCustomizationBlock customizationBlock;
 
 @property (strong, nonatomic) JBTableView *tableView;
 @property (strong, nonatomic) NSArray *links;
@@ -26,16 +27,16 @@ static UIColor *kLightBlueColor;
 
 @implementation RedditViewController
 
-+ (void)initialize
-{
-    kLightBlueColor = [UIColor colorWithRed:0.1 green:0.4 blue:0.7 alpha:1.0];
-}
-
-- (instancetype)initWithPullToRefreshViewClass:(Class<JBPullToRefreshView>)pullToRefreshViewClass;
-{
+- (instancetype)initWithDefaultColor:(UIColor *)color
+              pullToRefreshViewClass:(Class<JBPullToRefreshView>)pullToRefreshViewClass
+                       subredditLink:(NSString *)subredditLink
+     pullToRefreshCustomizationBlock:(PullToRefreshViewCustomizationBlock)customizationBlock {
     self = [super init];
     if (self) {
-        _pullToRefreshViewClass = pullToRefreshViewClass;
+        self.defaultColor = color;
+        self.pullToRefreshViewClass = pullToRefreshViewClass;
+        self.subredditLink = subredditLink;
+        self.customizationBlock = customizationBlock;
     }
     return self;
 }
@@ -44,9 +45,9 @@ static UIColor *kLightBlueColor;
 {
     [super viewDidLoad];
     
-    [self.navigationController.navigationBar setBarTintColor:kLightBlueColor];
+    [self.navigationController.navigationBar setBarTintColor:self.defaultColor];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
-    self.navigationItem.title = @"Reddit /r/all";
+    self.navigationItem.title = self.subredditLink;
 
     JBTableView *tableView = [[JBTableView alloc] initWithFrame:self.view.bounds];
     tableView.pullToRefreshViewClass = self.pullToRefreshViewClass;
@@ -65,6 +66,12 @@ static UIColor *kLightBlueColor;
     [self.view addSubview:tableView];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [self.tabBarController.tabBar setTintColor:self.defaultColor];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -76,7 +83,7 @@ static UIColor *kLightBlueColor;
 
 - (void)refreshLinks
 {
-    NSURL *frontURL = [NSURL URLWithString:@"http://www.reddit.com/r/all/hot/.json?count=25"];
+    NSURL *frontURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.reddit.com%@/hot/.json?count=25", self.subredditLink]];
     
     // Start the pullToRefreshView animation
     [self.tableView startRefreshing];
@@ -110,14 +117,8 @@ static UIColor *kLightBlueColor;
 
 - (void)JBTableView:(JBTableView *)tableView willSetupPullToRefreshView:(UIView<JBPullToRefreshView> *)pullToRefreshView
 {
-    // Using the JBTableViewPullToRefreshViewDelegate delegate method to set public properties on
-    // our pullToRefreshView before they're setuped by the JBTableView
-    if (tableView.pullToRefreshViewClass == [JBPullToRefreshView class]) {
-        [(JBPullToRefreshView *)pullToRefreshView setActivityIndicatorColor:kLightBlueColor];
-    } else if (tableView.pullToRefreshViewClass == [CirclePullToRefreshView class]) {
-        [(CirclePullToRefreshView *)pullToRefreshView setCircleColor:kLightBlueColor];
-    } else if (tableView.pullToRefreshViewClass == [BallsPullToRefreshView class]) {
-        [(BallsPullToRefreshView *)pullToRefreshView setBallsColor:kLightBlueColor];
+    if (self.customizationBlock) {
+        self.customizationBlock(pullToRefreshView);
     }
 }
 
@@ -135,7 +136,7 @@ static UIColor *kLightBlueColor;
     
     NSString *linkTitle = self.links[indexPath.row][@"data"][@"title"];
     cell.textLabel.text = linkTitle;
-    
+    cell.defaultColor = self.defaultColor;
     return cell;
 }
 

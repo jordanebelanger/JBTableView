@@ -12,6 +12,8 @@ extern NSString * const kRedditLinkTableViewCellIdentifier;
 
 @interface RedditLinkTableViewCell : UITableViewCell
 
+@property (strong, nonatomic) UIColor *defaultColor;
+
 + (CGFloat)cellHeightForCellWidth:(CGFloat)cellWidth withLinkTitle:(NSString *)linkTitle;
 
 @end
