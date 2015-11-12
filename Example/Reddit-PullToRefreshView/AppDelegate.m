@@ -49,9 +49,9 @@
     UINavigationController *defaultNavVC = [[UINavigationController alloc] initWithRootViewController:redditAllVC];
     defaultNavVC.title = @"Default";
     UINavigationController *circleNavVC = [[UINavigationController alloc] initWithRootViewController:redditLolVC];
-    circleNavVC.title = @"Circle";
+    circleNavVC.title = @"Balls";
     UINavigationController *ballsNavVC = [[UINavigationController alloc] initWithRootViewController:redditPoliticsVC];
-    ballsNavVC.title = @"Balls";
+    ballsNavVC.title = @"Circle";
     
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
     tabBarController.tabBar.tintColor = [UIColor whiteColor];
